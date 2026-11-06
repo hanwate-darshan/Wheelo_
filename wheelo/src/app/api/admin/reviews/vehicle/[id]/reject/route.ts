@@ -11,39 +11,37 @@ export async function POST(
     try {
         const session = await auth()
         if (!session || !session.user?.email || session.user.role !== "admin") {
-            return Response.json({ message: "unauthorized" }
-                , { status: 400 }
+            return Response.json({ message: "unauthorized" },
+                { status: 401 }
             )
         }
 
-        const {reason}=await req.json()
+        const { reason } = await req.json()
 
         await connectDb()
 
-        const vehicleId=(await context.params).id
-        const vehicle=await Vehicle.findById(vehicleId)
+        const vehicleId = (await context.params).id
+        const vehicle = await Vehicle.findById(vehicleId)
 
-        if(!vehicle){
+        if (!vehicle) {
             return Response.json(
-                {message:"vehicle not found"},
-                {status:400}
+                { message: "vehicle not found" },
+                { status: 404 }
             )
         }
 
-        vehicle.status="rejected"
-        vehicle.rejectionReason=reason
+        vehicle.status = "rejected"
+        vehicle.rejectionReason = reason
         await vehicle.save()
 
-   
-         return Response.json(
-                vehicle,
-                {status:200}
-            )
+        return Response.json(
+            vehicle,
+            { status: 200 }
+        )
     } catch (error) {
-         return Response.json(
-                {message:`vehicle rejected error ${error}`},
-                {status:500}
-            )
+        return Response.json(
+            { message: `vehicle rejected error ${error}` },
+            { status: 500 }
+        )
     }
-    
 }

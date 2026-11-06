@@ -2,22 +2,32 @@ import connectDb from "@/lib/db";
 import ChatMessage from "@/models/chatMessage.model";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req:NextRequest) {
+export async function POST(req: NextRequest) {
     try {
         await connectDb()
-        const {bookingId,sender,text}=await req.json()
-        const msg=await ChatMessage.create({
-            bookingId,sender,text
+        const { bookingId, sender, text } = await req.json()
+
+        if (!bookingId || !sender || !text || !text.trim()) {
+            return NextResponse.json(
+                { message: "missing required chat details" },
+                { status: 400 }
+            )
+        }
+
+        const msg = await ChatMessage.create({
+            bookingId,
+            sender,
+            text: text.trim()
         })
+
         return NextResponse.json(
             msg,
-            {status:200}
+            { status: 201 }
         )
     } catch (error) {
-        console.log(error)
-          return NextResponse.json(
-            {message:`send message error ${error}`},
-            {status:500}
+        return NextResponse.json(
+            { message: `send message error ${error}` },
+            { status: 500 }
         )
     }
 }

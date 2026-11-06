@@ -5,13 +5,14 @@ import VehicleSlider from './VehicleSlider'
 import AuthModal from './AuthModal'
 
 function PublicHome() {
- const [authOpen,setAuthOpen]=useState(false)
+  const [authOpen, setAuthOpen] = useState(false)
+
   return (
-    <>
-      <HeroSection onAuthRequired={()=>setAuthOpen(true)}/>
-      <VehicleSlider/>
-      <AuthModal open={authOpen} onClose={()=>setAuthOpen(false)}/>
-    </>
+    <main className="w-full bg-[#09090b] min-h-screen">
+      <HeroSection onAuthRequired={() => setAuthOpen(true)} />
+      <VehicleSlider onAuthRequired={() => setAuthOpen(true)} />
+      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
+    </main>
   )
 }
 

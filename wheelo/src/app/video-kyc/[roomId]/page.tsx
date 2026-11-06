@@ -127,7 +127,7 @@ try {
     <div className='min-h-screen bg-black text-white flex flex-col'>
       <div className='px-6 py-4 border-b border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4'>
         <div>
-          <Image src={"/logo.png"} alt='logo' width={44} height={44} priority />
+          <Image src="/logo.png" alt="WHEELO" width={110} height={44} priority className="h-9 w-auto object-contain" />
           <p className='text-xs text-gray-400'>{userData?.role == "admin" ? "Admin Verification" : "Partner Video KYC"}</p>
         </div>
 

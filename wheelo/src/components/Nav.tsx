@@ -56,15 +56,16 @@ function Nav() {
     return (
         <>
             <motion.div
-                initial={{ y: -60, opacity: 0 }}
+                initial={false}
                 animate={{ y: 0, opacity: 1 }}
-                className={`fixed top-3 left-1/2 -translate-x-1/2
-        w-[94%] md:w-[86%]
-        z-50 rounded-full bg-[#0B0B0B] text-white
-        shadow-[0_15px_50px_rgba(0,0,0,0.7)] py-3`}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                className={`fixed top-4 left-1/2 -translate-x-1/2
+        w-[94%] md:w-[88%] max-w-7xl
+        z-50 rounded-full bg-[#09090b]/85 backdrop-blur-xl text-white
+        border border-white/10 shadow-[0_15px_50px_rgba(0,0,0,0.6)] py-2.5 transition-all`}
             >
                 <div className='max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between'>
-                    <Image src={"/logo.png"} alt='logo' width={44} height={44} priority />
+                    <Image src="/logo.png" alt="WHEELO" width={110} height={48} priority className="h-9 w-auto object-contain cursor-pointer hover:opacity-85 transition" onClick={() => router.push("/")} />
                     <div className='hidden md:flex items-center gap-10'>
 
                         {userData?.role == "partner" ? (
@@ -87,16 +88,24 @@ function Nav() {
 
                         <div className='hidden md:block relative'>
                             {!userData ? (
-                                <button className='px-4 py-1.5 rounded-full bg-white text-black text-sm'
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className='px-5 py-2 rounded-full bg-white text-black font-semibold text-sm shadow-md hover:bg-zinc-100 transition cursor-pointer'
                                     onClick={() => setAuthOpen(true)}
                                 >
                                     Login
-                                </button>
+                                </motion.button>
                             ) : (
                                 <>
-                                    <button className='w-11 h-11 rounded-full bg-white text-black font-bold' onClick={() => setProfileOpen(p => !p)}>
+                                    <motion.button
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        className='w-10 h-10 rounded-full bg-white text-black font-bold flex items-center justify-center shadow-md'
+                                        onClick={() => setProfileOpen(p => !p)}
+                                    >
                                         {userData.name.charAt(0).toUpperCase()}
-                                    </button>
+                                    </motion.button>
 
                                     <AnimatePresence>
                                         {profileOpen && (

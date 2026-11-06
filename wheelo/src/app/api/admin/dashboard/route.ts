@@ -9,8 +9,8 @@ export async function GET(req: NextRequest) {
         await connectDb()
         const session = await auth()
         if (!session || !session.user?.email || session.user.role !== "admin") {
-            return Response.json({ message: "unauthorized" }
-                , { status: 400 }
+            return Response.json({ message: "unauthorized" },
+                { status: 401 }
             )
         }
         const totalPartners = await User.countDocuments({ role: "partner" })
@@ -21,9 +21,9 @@ export async function GET(req: NextRequest) {
         const pendingPartnerUsers = await User.find({
             role: "partner",
             partnerStatus: "pending",
-            partnerOnBoardingSteps: {$gte:3}
+            partnerOnBoardingSteps: { $gte: 3 }
         })
-        console.log(pendingPartnerUsers)
+
         const partnerIds = pendingPartnerUsers.map((p) => p._id)
         const partnerVehicles = await Vehicle.find({
             owner: { $in: partnerIds }
@@ -39,23 +39,20 @@ export async function GET(req: NextRequest) {
             vehicleType: vehicleTypeMap.get(String(p._id))
         }))
 
-
-        const pendingVehicles=await Vehicle.find({
-            status:"pending",
-            baseFare:{$exists:true},
-             pricePerKM:{$exists:true}
+        const pendingVehicles = await Vehicle.find({
+            status: "pending",
+            baseFare: { $exists: true },
+            pricePerKM: { $exists: true }
         }).populate("owner")
-
-
 
         return NextResponse.json({
             pendingVehicles,
-            stats:{ 
+            stats: {
                 totalPartners,
-            totalApprovedPartners,
-            totalPendingPartners,
-            totalRejectedPartners
-        },
+                totalApprovedPartners,
+                totalPendingPartners,
+                totalRejectedPartners
+            },
             pendingPartnersReviews
         }, {
             status: 200

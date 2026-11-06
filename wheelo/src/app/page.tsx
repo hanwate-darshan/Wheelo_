@@ -9,35 +9,37 @@ import connectDb from "@/lib/db";
 import User from "@/models/user.model";
 
 export default async function Home() {
-const session=await auth()
-  await connectDb()
-  const user=await User.findOne({email:session?.user?.email})
- const plainUser = JSON.parse(JSON.stringify(user))
-  return (
-   <div className="w-full min-h-screen bg-white">
-    <GeoUpdater userId={plainUser?._id}/>
-    {plainUser?.role=="partner"
-    ?
-    <>
-    <Nav/>
-    <PartnerDashboard/>
-    </>
+  const session = await auth();
+  let plainUser = null;
 
-    :
-    (
-      plainUser?.role=="admin"
-      ?
-      <AdminDashboard/>
-      :
-      <>
-      <Nav/>
-      <PublicHome/>
-      </>
-     
-    )
+  if (session?.user?.email) {
+    try {
+      await connectDb();
+      const user = await User.findOne({ email: session.user.email }).lean();
+      plainUser = user ? JSON.parse(JSON.stringify(user)) : null;
+    } catch (e) {
+      console.error("Error fetching home user:", e);
     }
-   
-    <Footer/>
-   </div>
+  }
+
+  return (
+    <div className="w-full min-h-screen bg-[#09090b]">
+      <GeoUpdater userId={plainUser?._id} />
+      {plainUser?.role === "partner" ? (
+        <>
+          <Nav />
+          <PartnerDashboard />
+        </>
+      ) : plainUser?.role === "admin" ? (
+        <AdminDashboard />
+      ) : (
+        <>
+          <Nav />
+          <PublicHome />
+        </>
+      )}
+
+      <Footer />
+    </div>
   );
 }

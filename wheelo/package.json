@@ -1,9 +1,10 @@
 {
-  "name": "3.rydex",
+  "name": "wheelo",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
+    "dev:turbo": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
@@ -13,6 +14,7 @@
     "@zegocloud/zego-uikit-prebuilt": "^2.17.3",
     "axios": "^1.13.6",
     "bcryptjs": "^3.0.3",
+    "canvas-confetti": "^1.9.4",
     "cloudinary": "^2.9.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.577.0",
@@ -28,10 +30,12 @@
     "react-redux": "^9.2.0",
     "rechart": "^0.0.1",
     "recharts": "^3.8.1",
-    "socket.io-client": "^4.8.3"
+    "socket.io-client": "^4.8.3",
+    "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/leaflet": "^1.9.21",
     "@types/node": "^20",
     "@types/nodemailer": "^7.0.11",

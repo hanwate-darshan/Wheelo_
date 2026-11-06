@@ -63,7 +63,7 @@ function page() {
 
     const handleAccept=async (id:string)=>{
         try {
-           const {data}=await axios.get(`/api/partner/bookings/${id}/accept`) 
+           const {data}=await axios.post(`/api/partner/bookings/${id}/accept`) 
            router.push("/partner/bookings")
 
         } catch (error) {
@@ -75,7 +75,7 @@ function page() {
 
     const handleReject=async (id:string)=>{
         try {
-           const {data}=await axios.get(`/api/partner/bookings/${id}/reject`) 
+           const {data}=await axios.post(`/api/partner/bookings/${id}/reject`) 
            window.location.reload()
         } catch (error) {
             console.log(error)

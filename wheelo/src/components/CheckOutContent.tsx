@@ -124,7 +124,7 @@ function CheckOutContent() {
           key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
           amount: data.amount,
           currency: "INR",
-          name: "RYDEX",
+          name: "WHEELO",
           description: "Ride Payment",
           order_id: data.orderId,
           handler: async function (response: any) {
@@ -147,7 +147,7 @@ function CheckOutContent() {
         paymentObject.open()
 
       } else {
-        const { data } = await axios.get(`/api/booking/${booking._id}/confirm`)
+        const { data } = await axios.post(`/api/booking/${booking._id}/confirm`)
         setLoading(false)
         if (data.success) {
           setStatus("confirmed")
@@ -174,7 +174,7 @@ function CheckOutContent() {
 
   const handleCancel = async () => {
     try {
-      const { data } = await axios.get(`/api/booking/${booking._id}/cancel`)
+      const { data } = await axios.post(`/api/booking/${booking._id}/cancel`)
      setStatus("idle")
     } catch (error) {
       console.log(error)

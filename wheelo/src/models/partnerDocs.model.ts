@@ -1,39 +1,34 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
-export interface IPartnerDocs{
-    owner:mongoose.Types.ObjectId
-    aadharUrl:string,
-    rcUrl:string,
-    licenseUrl:string
-    status:"approved" | "pending" | "rejected",
-    rejectionReason?:string,
-    createdAt:Date,
-    updatedAt:Date
-
+export interface IPartnerDocs {
+    owner: mongoose.Types.ObjectId;
+    aadharUrl: string;
+    rcUrl: string;
+    licenseUrl: string;
+    status: "approved" | "pending" | "rejected";
+    rejectionReason?: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
-
-const partnerDocsSchema=new mongoose.Schema<IPartnerDocs>({
-
-    owner:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User",
-        required:true
+const partnerDocsSchema = new mongoose.Schema<IPartnerDocs>({
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+        unique: true,
     },
-    aadharUrl:String,
-    rcUrl:String,
-    licenseUrl:String,
-   
-   status:{
-    type:String,
-    enum:["approved","rejected","pending"],
-    default:"pending"
-   },
-    rejectionReason:String,
-    
+    aadharUrl: String,
+    rcUrl: String,
+    licenseUrl: String,
+    status: {
+        type: String,
+        enum: ["approved", "rejected", "pending"],
+        default: "pending",
+        index: true,
+    },
+    rejectionReason: String,
+}, { timestamps: true });
 
-},{timestamps:true})
-
-const PartnerDocs=mongoose.models.PartnerDocs || mongoose.model("PartnerDocs",partnerDocsSchema)
-export default PartnerDocs
-
+const PartnerDocs = mongoose.models.PartnerDocs || mongoose.model("PartnerDocs", partnerDocsSchema);
+export default PartnerDocs;

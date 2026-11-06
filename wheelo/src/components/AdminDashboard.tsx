@@ -51,8 +51,7 @@ function AdminDashboard() {
       <div className='sticky top-0 bg-white/80 backdrop-blur-lg border-b z-40'>
         <div className='max-w-7xl mx-auto h-16 px-6 flex items-center justify-between'>
           <div className='flex items-center gap-3'>
-            <Image src={"/logo.png"} alt='logo' width={44} height={44} priority />
-
+            <Image src="/logo-dark.png" alt="WHEELO" width={110} height={44} priority className="h-9 w-auto object-contain" />
           </div>
 
           <div className='flex items-center gap-2 text-xs px-3 py-1.5 rounded-full bg-black text-white'>

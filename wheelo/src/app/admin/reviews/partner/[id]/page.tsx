@@ -54,7 +54,7 @@ function page() {
     const handleApprove=async ()=>{
         setApproveLoading(true)
 try {
-    const {data}=await axios.get(`/api/admin/reviews/partner/${id}/approve`)
+    const {data}=await axios.post(`/api/admin/reviews/partner/${id}/approve`)
     console.log(data)
     setApproveLoading(false)
     router.push("/")
