@@ -192,3 +192,4 @@ npx tsc --noEmit  # 0 TypeScript compilation errors
 
 ## 📄 License
 This project is licensed under the [MIT License](LICENSE).
+
