@@ -165,10 +165,20 @@ function CheckOutContent() {
   const fetchActiveBooking = async () => {
     try {
       const { data } = await axios.get("/api/booking/active")
-      setBooking(data.booking)
-      setStatus(data.booking.bookingStatus || data.booking)
+      if (data?.booking && typeof data.booking === "object" && data.booking._id) {
+        setBooking(data.booking)
+        const bStatus = data.booking.bookingStatus
+        if (bStatus === "confirmed" || bStatus === "started") {
+          window.location.href = `/user/ride/${data.booking._id}`
+          return
+        }
+        setStatus(bStatus || "idle")
+      } else {
+        setStatus("idle")
+      }
     } catch (error) {
       console.log(error)
+      setStatus("idle")
     }
   }
 
@@ -186,12 +196,19 @@ function CheckOutContent() {
   }, [])
 
   useEffect(() => {
-    if (status !== "awaiting_payment") return;
-    const t = setTimeout(() => {
-      setStatus("payment")
-    }, 2000)
-    return () => { clearTimeout(t) }
-  }, [status])
+    if (status === "awaiting_payment") {
+      const t = setTimeout(() => {
+        setStatus("payment")
+      }, 2000)
+      return () => clearTimeout(t)
+    }
+    if (status === "confirmed" && booking?._id) {
+      const t = setTimeout(() => {
+        window.location.href = `/user/ride/${booking._id}`
+      }, 1500)
+      return () => clearTimeout(t)
+    }
+  }, [status, booking])
   return (
     <div className='min-h-screen bg-zinc-100 px-4 py-12'>
       <div className='relative max-w-6xl mx-auto z-10'>
@@ -286,7 +303,7 @@ function CheckOutContent() {
             <div className='flex-1 p-8 sm:p-10 flex flex-col'>
               <AnimatePresence mode="wait">
 
-                {(status == "idle" || status == "rejected") && (
+                {(status == "idle" || status == "rejected" || !["requested", "awaiting_payment", "payment", "confirmed"].includes(status)) && (
                   <motion.div
                     key="idle"
                     initial={{ opacity: 0, y: 12 }}
