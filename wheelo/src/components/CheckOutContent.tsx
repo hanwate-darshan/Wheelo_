@@ -172,6 +172,10 @@ function CheckOutContent() {
           window.location.href = `/user/ride/${data.booking._id}`
           return
         }
+        if (bStatus === "awaiting_payment") {
+          setStatus("payment")
+          return
+        }
         setStatus(bStatus || "idle")
       } else {
         setStatus("idle")
@@ -194,6 +198,19 @@ function CheckOutContent() {
   useEffect(() => {
     fetchActiveBooking()
   }, [])
+
+  // Auto-poll active booking every 2.5s if waiting for driver acceptance
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null
+    if (status === "requested") {
+      interval = setInterval(() => {
+        fetchActiveBooking()
+      }, 2500)
+    }
+    return () => {
+      if (interval) clearInterval(interval)
+    }
+  }, [status])
 
   useEffect(() => {
     if (status === "awaiting_payment") {
