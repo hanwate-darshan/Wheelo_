@@ -180,9 +180,9 @@ function SearchMap({ pickUp, drop, onChange, onDistance }: props) {
 
 
         <TileLayer
-
-          attribution='&copy; <a href="https://carto.com/">"CARTO"</a> contributors'
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" />
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://www.geoapify.com/">Geoapify</a>'
+          url={`https://maps.geoapify.com/v1/tile/positron/{z}/{x}/{y}.png?apiKey=${process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY || "6a7ae73b65f94a8cbd8df246d5089bc9"}`}
+        />
 
         {p1 && p2 && <FitBounds p1={p1} p2={p2} />}
 
