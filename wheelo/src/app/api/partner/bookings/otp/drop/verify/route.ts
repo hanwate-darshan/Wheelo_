@@ -57,8 +57,8 @@ export async function POST(req: NextRequest) {
         }
 
         if (booking.paymentStatus === "cash") {
-            const adminCommission = booking.fare * 0.10
-            const partnerAmount = booking.fare - adminCommission
+            const adminCommission = Math.round(booking.fare * 0.10 * 100) / 100
+            const partnerAmount = Math.round((booking.fare - adminCommission) * 100) / 100
             booking.adminCommission = adminCommission
             booking.partnerAmount = partnerAmount
         }

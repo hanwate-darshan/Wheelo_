@@ -33,6 +33,18 @@ createdAt:Date;
 updatedAt:Date;
 }
 
+const pointSchema = new mongoose.Schema({
+    type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point"
+    },
+    coordinates: {
+        type: [Number],
+        required: true
+    }
+}, { _id: false });
+
 const userSchema=new mongoose.Schema<IUser>({
 name:{
     type:String,
@@ -93,14 +105,10 @@ socketId:{
     type:String,
     default:null
 },
-location:{
-    type:{
-        type:String,
-        enum:["Point"]
-    },
-    coordinates:[Number]
-}
-,
+location: {
+    type: pointSchema,
+    default: undefined
+},
 isOnline:{
     type:Boolean,
     default:false,
@@ -109,7 +117,7 @@ isOnline:{
 
 },{timestamps:true})
 
-userSchema.index({location:"2dsphere"})
+userSchema.index({location:"2dsphere"}, { sparse: true })
 
 const User=mongoose.models.User || mongoose.model("User",userSchema)
 export default User
