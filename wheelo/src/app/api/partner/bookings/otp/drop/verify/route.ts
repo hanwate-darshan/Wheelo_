@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import connectDb from "@/lib/db";
 import Booking from "@/models/booking.model";
 import User from "@/models/user.model";
+import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -68,8 +69,22 @@ export async function POST(req: NextRequest) {
         booking.dropOtpExpires = undefined
         await booking.save()
 
+        // Notify user via socket that ride is completed
+        try {
+            await axios.post(`${process.env.NEXT_PUBLIC_SOCKET_SERVER_URL}/emit`, {
+                event: "ride-completed",
+                userId: booking.user._id || booking.user,
+                data: {
+                    bookingId: booking._id,
+                    bookingStatus: "completed"
+                }
+            })
+        } catch (socketErr) {
+            console.log("Socket emit error on drop verify:", socketErr)
+        }
+
         return NextResponse.json(
-            { message: "drop otp verified" },
+            { message: "drop otp verified", success: true },
             { status: 200 }
         )
     } catch (error) {

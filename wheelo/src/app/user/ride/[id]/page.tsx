@@ -85,17 +85,28 @@ function page() {
     }
 
     useEffect(() => {
-       const socket=getSocket()
-        socket.emit("join-ride",id)
-        socket.on("driver-location",({latitude,longitude})=>{
-            setDriverPos([latitude,longitude])
+        const socket = getSocket()
+        socket.emit("join-ride", id)
+        socket.on("driver-location", ({ latitude, longitude }) => {
+            setDriverPos([latitude, longitude])
         })
-       return ()=>{
-        socket.off("join-ride")
-        socket.off("driver-location")
-
-       }
-    }, [])
+        socket.on("ride-completed", () => {
+            setStatus("completed")
+        })
+        socket.on("ride-started", () => {
+            setStatus("started")
+        })
+        socket.on("ride-confirmed", () => {
+            setStatus("confirmed")
+        })
+        return () => {
+            socket.off("join-ride")
+            socket.off("driver-location")
+            socket.off("ride-completed")
+            socket.off("ride-started")
+            socket.off("ride-confirmed")
+        }
+    }, [id])
 
 
     if (loading) {

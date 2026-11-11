@@ -151,21 +151,21 @@ function PanelContent({ isActive, displayDistance, displayEta, cfg, status, book
                     <div className='flex gap-3 p-4 border-b border-zinc-100'>
                         <div className='flex flex-col items-center flex-shrink-0 pt-1'>
                             <div className='w-3 h-3 rounded-full bg-zinc-900 border-2 border-white shadow-sm' />
-                            <div className='w-px bg-zinc-200 mt-1" style={{ height: 20 }} ' />
+                            <div className='w-px bg-zinc-200 mt-1 h-5' />
                         </div>
                         <div className='flex-1 min-w-0'>
                            <p className='text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-0.5'>PickUp</p>
-                           <p className='text-sm text-zinc-800 leading-snug'>{booking?.pickUpAddress}</p>
+                           <p className='text-sm font-semibold text-zinc-900 leading-snug break-words'>{booking?.pickUpAddress || "Pickup location not specified"}</p>
                         </div>
                     </div>
                      <div className='flex gap-3 p-4 border-b border-zinc-100'>
                         <div className='flex flex-col items-center flex-shrink-0 pt-1'>
                             <div className='w-3 h-3 rounded-full bg-zinc-900 border-2 border-white shadow-sm' />
-                            <div className='w-px bg-zinc-200 mt-1" style={{ height: 20 }} ' />
+                            <div className='w-px bg-zinc-200 mt-1 h-5' />
                         </div>
                         <div className='flex-1 min-w-0'>
                            <p className='text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-0.5'>Drop</p>
-                           <p className='text-sm text-zinc-800 leading-snug'>{booking?.dropAddress}</p>
+                           <p className='text-sm font-semibold text-zinc-900 leading-snug break-words'>{booking?.dropAddress || "Drop location not specified"}</p>
                         </div>
                     </div>
                 </div>

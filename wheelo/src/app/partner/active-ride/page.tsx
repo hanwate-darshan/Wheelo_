@@ -183,9 +183,15 @@ function page() {
         socket.on("driver-location", ({ latitude, longitude }) => {
             setDriverPos([latitude, longitude])
         })
+        socket.on("ride-confirmed", (data) => {
+            if (data?.bookingStatus) {
+                setStatus(data.bookingStatus)
+            }
+        })
         return () => {
             socket.off("join-ride")
             socket.off("driver-location")
+            socket.off("ride-confirmed")
         }
     }, [booking?._id])
     if (loading) {

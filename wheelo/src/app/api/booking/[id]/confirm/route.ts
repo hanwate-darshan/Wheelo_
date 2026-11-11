@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import connectDb from "@/lib/db";
 import Booking from "@/models/booking.model";
 import User from "@/models/user.model";
+import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
@@ -41,8 +42,23 @@ export async function POST(
         booking.bookingStatus = "confirmed"
         await booking.save()
 
+        // Notify driver via socket that ride is confirmed via cash
+        try {
+            await axios.post(`${process.env.NEXT_PUBLIC_SOCKET_SERVER_URL}/emit`, {
+                event: "ride-confirmed",
+                userId: booking.driver,
+                data: {
+                    bookingId: booking._id,
+                    bookingStatus: "confirmed",
+                    paymentStatus: "cash"
+                }
+            })
+        } catch (socketErr) {
+            console.log("Socket emit error on cash confirm:", socketErr)
+        }
+
         return NextResponse.json(
-            { success: true },
+            { success: true, booking },
             { status: 200 }
         )
 

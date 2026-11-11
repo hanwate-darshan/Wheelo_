@@ -27,18 +27,23 @@ const io=new Server(server,{
 })
 
 
-app.post("/emit",async (req,res)=>{
-const {event,userId,data}=req.body
-try {
-    const user=await User.findById(userId)
-    if(user.socketId){
-io.to(user.socketId).emit(event,data)
+app.post("/emit", async (req, res) => {
+    const { event, userId, data } = req.body
+    try {
+        if (data?.bookingId) {
+            io.to(`ride-${data.bookingId}`).emit(event, data)
+        }
+        if (userId) {
+            const user = await User.findById(userId)
+            if (user && user.socketId) {
+                io.to(user.socketId).emit(event, data)
+            }
+        }
+
+        return res.json({ success: true })
+    } catch (error) {
+        return res.json({ success: false })
     }
-    
-    return res.json({success:true})
-} catch (error) {
-    return res.json({success:false})
-}
 })
 
 io.on("connection",(socket)=>{
